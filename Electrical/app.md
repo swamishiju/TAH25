@@ -1,3 +1,17 @@
+## General Questionnaire
+
+1. India as a country is famously plagued with headache inducing traffic. As an 18 year long Banlore resident I couldn't agree more. The metro system in Banglore has over the years managed to some what mitigate this issue.   
+
+2.
+
+3. I want to work on the PCB and embedded software aspects of the Electrical Subsystem. I am passionate about low-level programming and working close to hardware.  
+
+4.
+
+5. I am a DC in Math Club wokring on a 3D rendering mini-project and a DC is Programming Club under the CPP dev vertical. I can dedicate  
+
+6. I am familiar with Python and C. I aim to learn CPP, VHDL and Matlab this semester. I have been programming in Python for 4 years from personal projects and minor scipting and C for over a year mainly from learning kernel development.
+
 ## Question 1
 
 Resisto can adjust the motor speed using the switch to create a pulse width modulated (PWM) signal. This setup needs Resisto to quickly flip the switch to create the signal.
@@ -53,9 +67,14 @@ Differential pair refers to a pair of signal traces commonly used it high-speed 
 
 C) A thermistor is a resistor made of material with resitivity that is strongly dependant on temperature. They change resistance in response to a change in temperature which alters the potential difference across it which we can measure to calculate temperature. If we know the R/T curve for the thermistor we can use it to find temperature.
 
-Steinhart–Hart equation is commonly used as a third order approximation for practical devices of large ranges of temperature.
+Steinhart–Hart equation is commonly used as a third order approximation for practical devices of large ranges of temperature. 
 
 $$\frac1T=a+b\log R+c(\log R)^3$$ where $a,b,c$ are parameters
+
+
+Code for data processing
+
+[Github Link TODO]()
 
 **Sources**
    - [PCB GoGO](https://www.pcbgogo.com/knowledge-center/Printed_Circuit_Board_Prototype.html)
@@ -78,7 +97,7 @@ The function of the data link layer is to ensure reliable communication between 
 
 The network layer ties together the links into a network. Each device is provided a unique network address at this link. Its primary function is routing packets between these addresses. Technically these 3 layers are enough for a packet switch. A distributed routing protocol is implemented in this layer to learn good good routes. These route computations are stored in a routing table at each switch. When the layer gets a packet the table is looked up and the packet is then sent to the link layer and queued at the appropriate output port.
 
--
+The tansport layer controls the reliability of a given link between source and destination through flow and error control. It provides acknowledgement of the succesful data transmission and sends the next packet if no errors occured.
 
 The session layer provides services for dialog management between users. For instance continuing the communication incase of an error.
 
@@ -89,12 +108,43 @@ The application layer handles functions like file transfer and is the layer that
 
 CAN uses the physical, data link and application layers. The physical layer is the transceiver, the data link layer functions as the embedded controller and the application layer funtions a DSP.
 
-**B)** Standard CAN bit fields have a 11 bit identifier. If two nodes try to access the node at the same time access is implemented with a nondestructive bit-wise arbitration.
+**B)** Standard CAN bit fields have a 11 bit identifier (extended CAN has 29 bits).
+If two nodes try to access the node at the same time access is implemented with a nondestructive bit-wise arbitration.
 CAN messages have priority based on the identifier. The lower identifier has higher priority.
+A standard CAN frame starts with a dominant SOF (Start Of Frame) followed by its identifier. Then there is a RTR (Remote Transmission Request) bit which differentiates between a data frame (dominant 0) or a remote request frame (dominant 1) then there is an IDE(IDentifier Extension) bit which denotes whether we are using standard or extended CAN frame format. Then there is a reserved bit that might be used in further updates of the frame standard. Then we have a 4 bit DLC (Data Length Code) segment which says how many bytes of data we are transmitting (0-8 bytes sending DLC 9-15 is physically possible but most controllers limit data to 8 bytes). We then have the data segment which ranges from 0 to 64 bits depending on DLC. Then we have 15 bits of CRC and then a recessive delim followed by a bit each of ACK, ACK delim(recessive) and a 7 bit EOF(End Of Frame all recessive) and 3 bits of IFS(Inter-Frame spacing all recessive). 
 
-**C)** Nodes access the CAN bus randomly. The bus's idle state is high which is the recessive bit.Nodes can monitor the bus while transmitting. When nodes start transmitting they send a low SOF(start of frame) signal followed by their id. If two nodes are transmitting at the same time the id with 0 (low) will overwrite the bus at the conflicting id bit will win the arbitration (higher priority) and the node that loses the arbitration halts transmission and    
+**C)** Nodes access the CAN bus randomly. The bus's idle state is high which is the recessive bit.Nodes can monitor the bus while transmitting.
+When nodes start transmitting they send a low SOF signal followed by their id and they keep monitoring the bus. If it reads a bit that doesn't match what it is transmitting then it stops transmitting and goes to reciever mode. This works since if it reads a dominant low when it is trasmitting a high it means another node is transmitting with higher priority so to avoid a collision it stops transmitting. This is refered to as bus arbitration. After the end of transmission nodes that recieve an accurate message trasmit a dominant bit to overwrite the data frame's designated ACK bit (technically 2 bits but one is delim) indicating a succesful transmission. If the bit is still recessive then the transmission failed and after rearbitrating the node tries to transmit again.
 
-**D)** 
+**D)** The CAN bus is a brodcast bus i.e all nodes recieve all messages. Some nodes might care only about certain critical messages. For example if we have a battery controller connected to the bus we care about battery health messages more than the speed of the pod. If the controller recieves the useless messages the software needs to process it. To fix this issue we can implement Hardware filtering in the CAN network.
+Hardware filtering just filters out messages a particular node requires, this lessens the work software has to do. Not filtering messages uses up node resources for messages it won't process anyway. 
+
+```py
+FilterID: 0x15203424 | 0b10101001000000011010000100100 
+MaskID  : 0x1FAB677E | 0b11111101010110110011101111110
+Accepted: 0x-------- | 0b101010_1_0_00_01__100_010010_
+```
+
+It accepts all identifiers of the form Accepted where each `_` can be 0 or 1. So there are a total of $2^8$ or $256$ accepted IDs.
+
+
+i) 
+```py
+FilterID: 0x00000000 | 0b00000000000000000000000000000
+MaskID  : 0x00000000 | 0b00000000000000000000000000000
+Accepted: 0x-------- | 0b_____________________________
+```
+
+ii) 
+```py
+FilterID: 0x00000000 0b00000000000000000000000000000
+MaskID  : 0x00000000 0b11111111111111111111111111111
+Accepted: 0x00000000 0b00000000000000000000000000000
+```
+As far as I am aware it is not possible to make a CAN node accept no messages the minimum is 1. So I chose it to only accept the highest priority message.
+
+E) The CAN frame has designated 16 bit (15+delim) bits of CRC (cyclic redundancy check) at the end of the frame before the ACK bit. CRC is a common error detection code used in networks and data storage. If any bit of the transmitted data is altered its CRC changes. So a node sends the frame with a pre-calculated CRC. If external stimuli like say noise alters the message the CRC will no longer match which lets the reciever know the message is invalid. Upon recieving an invalid message the reciever doesn't overwrite ACK which the sender recognises as saying the data integrity is compromised and tries to brodcast again after rearbitration.
+
 
 **Sources**:
 	- Anurag Kumar  - Communication Networking: An Analytical Approach 
@@ -111,7 +161,7 @@ Each process has its own program counter independant to the others. When a proce
 
 **Bonus:** Intel Pentium 4 introduced multithreading (hyperthreading) to the x86 processor. This allowed CPUs to store the states of two (or more) threads and allowed the CPU to switch between them on a very small time scale.
 This feature can increase the execution speed in general. For example when the current process requests uncached data from memory which takes several clock cycles to complete the CPU can just switch to another thread to use the unused computing resources.
-The OS sees the number of "logical threads" which is the total number of threads that can be scheduled and executed by the CPU. Since task manager simply displays the thread count seen by the OS the counts different from the one reported by the CPU manufacturer which is the physical thread count.  
+The OS sees the number of "logical threads" which is the total number of threads that can be scheduled and executed by the CPU. Since task manager simply displays the thread count seen by the OS the counts different from the one reported by the CPU manufacturer which is the physical thread count.   
 
 **B)**
 
