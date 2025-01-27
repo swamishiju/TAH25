@@ -31,28 +31,56 @@ This has several issues namely
 - Motor will not run smoothly
 - Flipping switch is annoying
 
-In both attempts we use a basic PWM signal generator using a 555
+In both attempts we use a basic PWM signal generator using a 555 and a potientiometer to control duty cycle
 
-![Circuit-1]()
-
-Dioden's first attempt would be directly using the output of the signal generator to run the motor. 
-
-
-We can use to potentiometer as a duty cycle controller from the 555 data sheet output duty cycle (D) is 
+From the 555 data sheet output duty cycle (D) is 
 $$
 D = \frac{R_B}{R_A+2R_B}
 $$
 
 Where $R_B$ is resistance of potentiometer
 
+![Circuit-1](https://github.com/swamishiju/TAH25/blob/2d9ae57ed7a203689f1e71b4af20a74cb1cba184/Electrical/images/circuit-1.jpeg?raw=true)
+
+Dioden's first attempt might've been to directly use the output of the signal generator to run the motor 
+
+![Circuit-2_1](https://github.com/swamishiju/TAH25/blob/2d9ae57ed7a203689f1e71b4af20a74cb1cba184/Electrical/images/circuit-2_1.jpeg?raw=true)
+
+
+This isn't a good method since the signal may not be sufficiently strong, motor speed changing won't be smooth and we can't change direction.
+
+Inorder to make it smooth we can connect the signal into the gate terminal of an NMOSFET which takes care of the first two problems by have source and sink connected to an external voltage source
+
+![Circuit-2_2](https://github.com/swamishiju/TAH25/blob/2d9ae57ed7a203689f1e71b4af20a74cb1cba184/Electrical/images/circuit-2_2.jpeg?raw=true)
+
+In order to change direction of the conveyer we need a DPDT relay to change the polarity of the motor. Activating the relay will switch the connections on the motor making it spin in reverse.
+
+![Circuit-2_3](https://github.com/swamishiju/TAH25/blob/2d9ae57ed7a203689f1e71b4af20a74cb1cba184/Electrical/images/circuit-2_3.jpeg?raw=true)
+
+We should probably also heat sink the MOSFET to make sure it doesn't overheat.
+
 The total cost comes out to
+
+```
+1 555 Timer       50
+1 Potentiometer   15
+2 Capacitors      40
+2 Diodes          20
+3 Resistors       60
+1 MOSFET          60
+1 DPDT            20
+1 Heat Sink      150
+                ------
+                 410
+```
 
 
 
 
 **Sources:**
  - [TI 555 Timer datasheet](https://www.ti.com/lit/ds/symlink/lm555.pdf)
-
+ - [PWM Mosfet Circuit](https://www.build-electronic-circuits.com/555-pwm-circuit/)
+ - [Mosfet heating](https://electronics.stackexchange.com/questions/152699/mosfet-overheating-in-pwm-control)
 
 
 ## Question 2
@@ -314,7 +342,7 @@ Discrepancies can happen here if one thread copies the global value and while it
 
 We can fix this discrepancy by implementing a mutex lock on the balance. Which simply means only one thread can have access to it at a time.
 
-![Mutex thread](https://github.com/swamishiju/TAH25/blob/82752ec51326ae753dbb7c524c7e032e88eb1d5d/Electrical/images/mutex_thread.png?raw=true)
+![Mutex thread](https://github.com/swamishiju/TAH25/blob/2d9ae57ed7a203689f1e71b4af20a74cb1cba184/Electrical/images/mutex_thread.jpeg?raw=true)
 
 **Sources:** 
  - Andrew S Tanenbaum - Modern Operating Systems
