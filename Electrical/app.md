@@ -3,7 +3,7 @@
 1. India as a country is famously plagued with headache inducing traffic. As an 18 year long Banglore resident I couldn't agree more. The metro system in Banglore has over the years managed to control this issue to a large extent. I have come to see the hyperloop system as a for the lack of a better word mordern iteration of the concept of metroes. 
 India as a country is rapidly developing and transport infrastructure needs to grow to meet this demand. A properly implemented Hyperloop is in a good place to provide a novel solution to this growing demand. The lost productivity due to traffic jams are in the order of billions per annum, lessening commute time would also increase general productivity. An economically designed hyperloop model could after the initial capital and maintainance still effectively create a positive outcome on the economy.
 
-In conclusion I think the hyperloop would be a novel solution to modern transportation issues and it is feasible since it would pay off within a reasonable time span. The success of the first line would create demand for more hyperloop lines and this process will create the new market and a subsequent "race" for hyperloop innovation. 
+    In conclusion I think the hyperloop would be a novel solution to modern transportation issues and it is feasible since it would pay off within a reasonable time span. The success of the first line would create demand for more hyperloop lines and this process will create the new market and a subsequent "race" for hyperloop innovation. 
 
 2.
 
@@ -13,10 +13,11 @@ In conclusion I think the hyperloop would be a novel solution to modern transpor
 
 5. I am a DC in Math Club wokring on a 3D rendering mini-project and a DC is Programming Club under the CPP dev vertical. I can dedicate 18-20 hours a week comfortably and maybe 2-3 more hours depending on the week. 
 
-6. I am familiar with Python and C. I aim to learn CPP, Verilog and Matlab this semester. I have been programming in Python for 4 years from personal projects and minor scipting and C for over a year mainly from learning kernel development.
+6. I am familiar with Python and C. I aim to learn CPP, Verilog and Matlab this semester. I have been programming in Python for 4 years from personal projects and minor scipting and C for over a year mainly from learning kernel development and to some extent course work.
 
-[Personal OSdev Project](https://github.com/swamishiju/VoomOS)
-Currently on dev hiatus doing research 😅
+    [Personal OSdev Project](https://github.com/swamishiju/VoomOS)
+
+    Currently on dev hiatus doing research 😅
 
 ## Question 1
 
@@ -30,12 +31,12 @@ This has several issues namely
 - Motor will not run smoothly
 - Flipping switch is annoying
 
+In both attempts we use a basic PWM signal generator using a 555
 
+![Circuit-1]()
 
-Dioden's first attempt would be using a 555 timer to create the PWM signal instead of pressing the button. Speed adjustment can be implemented using a potentiometer. 
+Dioden's first attempt would be directly using the output of the signal generator to run the motor. 
 
-
-![Circuit diagram]()
 
 We can use to potentiometer as a duty cycle controller from the 555 data sheet output duty cycle (D) is 
 $$
@@ -50,7 +51,7 @@ The total cost comes out to
 
 
 **Sources:**
-    - [TI 555 Timer datasheet](https://www.ti.com/lit/ds/symlink/lm555.pdf)
+ - [TI 555 Timer datasheet](https://www.ti.com/lit/ds/symlink/lm555.pdf)
 
 
 
@@ -60,17 +61,17 @@ The total cost comes out to
 If the pre-charge relay was not added to operate the circuit both main relays are closed and the capacitor charges up with no resistance in a very small time period. This sudden voltage spike across the inverter and accompanying inrush current can cause damage to the components. 
 To fix this we add a pre-charge relay. We start by closing main relay(-) and the pre-charge relay, this is then simply an RC circuit that gradually charges. After a sufficient amount of time we can then open the pre-charge relay and close main relay(+) to begin usual operation.
 
-2. Assume we pre-charge capacitor to 95% of max-charge (pre charge for $3\tau$), pre charge time $T$ and max-voltage $V_fuse$. 
-$$T=3RC\\V_fuse=\fracVR$$
+2. Assume we pre-charge capacitor to 95% of max-charge (pre charge for $3\tau$), pre charge time $T$ and max-voltage $V_\text{fuse}$. 
+$$T=3RC\\ \ \\V_\text{fuse}=\frac VR$$
 
 $$
-R=\frac V{V_fuse},\, C=\frac{V_fuse}{3V}T
+R=\frac V{V_\text{fuse}},\, C=\frac{V_\text{fuse}}{3V}T
 $$
 
 3.
 
-**Sources**
-    - [TI Pre-Charge application brief](https://www.ti.com/lit/ab/slvafb0/slvafb0.pdf)
+**Sources:**
+- [TI Pre-Charge application brief](https://www.ti.com/lit/ab/slvafb0/slvafb0.pdf)
 
 ## Question 3
 
@@ -84,7 +85,7 @@ For achieving these parameters we need a 10s10p which gives 33 V and 25 Ah as it
 
 ## Question 4 
 
-A)
+**A)**
 - Traces:
 PCB trace refers to the network of copper, wiring, insulation and fuses that make up a board. The trace width is an import parameter to keep in mind while designing since passing high current through thin traces can lead to overheating and damage.
 
@@ -107,10 +108,10 @@ Solder mask is a thin layer of polymer applied to copper traces and vias for pro
 Differential pair refers to a pair of signal traces commonly used it high-speed circuits to cancel out noise and enhance signal strength. Both traces carry the same signal but with opposite phase and the receiver samples the signal by taking the difference between the two signals. This has the advantage of removing any common noise and amplifying the signal.
 
 
-B)
+**B)**
 
 
-C) A thermistor is a resistor made of material with resitivity that is strongly dependant on temperature. They change resistance in response to a change in temperature which alters the potential difference across it which we can measure to calculate temperature. If we know the R/T curve for the thermistor we can use it to find temperature.
+**C)** A thermistor is a resistor made of material with resitivity that is strongly dependant on temperature. They change resistance in response to a change in temperature which alters the potential difference across it which we can measure to calculate temperature. If we know the R/T curve for the thermistor we can use it to find temperature.
 
 Steinhart–Hart equation is commonly used as a third order approximation for practical devices of large ranges of temperature. 
 
@@ -143,13 +144,14 @@ $$
 
 This is a fit with $R^2=99.89$
 
-Code for voltage to resistance
+**Code for voltage to resistance:** [Github Link](https://github.com/swamishiju/TAH25/blob/82752ec51326ae753dbb7c524c7e032e88eb1d5d/Electrical/4%20V2R/v2r.c)
 
-[Github Link TODO]()
+**Code for data processing:** [Github Link](https://github.com/swamishiju/TAH25/blob/82752ec51326ae753dbb7c524c7e032e88eb1d5d/Electrical/4%20ADC/data_process.py)
 
-Code for data processing
+![Clean data](https://github.com/swamishiju/TAH25/blob/82752ec51326ae753dbb7c524c7e032e88eb1d5d/Electrical/images/data_comparision.png?raw=true)
 
-[Github Link TODO]()
+
+
 
 **Sources**
    - [PCB GoGO](https://www.pcbgogo.com/knowledge-center/Printed_Circuit_Board_Prototype.html)
@@ -229,8 +231,8 @@ E) The CAN frame has designated 16 bit (15+delim) bits of CRC (cyclic redundancy
 
 
 **Sources**:
-	- Anurag Kumar  - Communication Networking: An Analytical Approach 
-    - [TI Introduction to CAN](https://www.ti.com/lit/an/sloa101b/sloa101b.pdf)
+- Anurag Kumar  - Communication Networking: An Analytical Approach 
+ - [TI Introduction to CAN](https://www.ti.com/lit/an/sloa101b/sloa101b.pdf)
 
 
 ## Question 7
@@ -260,7 +262,7 @@ Start the pod                       [Freuqent]
 
 
 **Sources**:
-	- Anurag Kumar  - Communication Networking: An Analytical Approach 
+- Anurag Kumar  - Communication Networking: An Analytical Approach 
 
 ## Question 8 
 
@@ -301,18 +303,18 @@ Some techniques used in software development to handle resources altered by diff
 - Thread safe DS
 
 **Bonus**
-[Naive Thread]()
-[Mutex Thread]()
+[Naive Thread](https://github.com/swamishiju/TAH25/blob/82752ec51326ae753dbb7c524c7e032e88eb1d5d/Electrical/8%20Thread/simple_thread.c)
+[Mutex Thread](https://github.com/swamishiju/TAH25/blob/82752ec51326ae753dbb7c524c7e032e88eb1d5d/Electrical/8%20Thread/thread_mutex.c)
 
 Discrepancies occur in the naive implementation. When we want to change the value of a global variable by say incrementing/decrementing it we first copy the value of the variable to one of the thread's registers. The value in the register is then changed and saved back into the global variable.
 
 Discrepancies can happen here if one thread copies the global value and while it is processing it another thread copies the value too. So instead of having both threads' changes applies to it only one of them is.
 
-[Insert Image]()
+![Naive thread](https://github.com/swamishiju/TAH25/blob/82752ec51326ae753dbb7c524c7e032e88eb1d5d/Electrical/images/naive_thread.png?raw=true)
 
 We can fix this discrepancy by implementing a mutex lock on the balance. Which simply means only one thread can have access to it at a time.
 
-[Inset Image 2]()
+![Mutex thread](https://github.com/swamishiju/TAH25/blob/82752ec51326ae753dbb7c524c7e032e88eb1d5d/Electrical/images/mutex_thread.png?raw=true)
 
 **Sources:** 
  - Andrew S Tanenbaum - Modern Operating Systems
