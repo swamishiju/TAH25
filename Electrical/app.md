@@ -1,15 +1,15 @@
 ## General Questionnaire
 
-1. India as a country is famously plagued with headache inducing traffic. As an 18 year long Banglore resident I couldn't agree more. The metro system in Banglore has over the years managed to control this issue to a large extent. I have come to see the hyperloop system as a for the lack of a better word mordern iteration of the concept of metroes. 
-India as a country is rapidly developing and transport infrastructure needs to grow to meet this demand. A properly implemented Hyperloop is in a good place to provide a novel solution to this growing demand. The lost productivity due to traffic jams are in the order of billions per annum, lessening commute time would also increase general productivity. An economically designed hyperloop model could after the initial capital and maintainance still effectively create a positive outcome on the economy.
+1. India as a country is famously plagued with headache-inducing traffic. As someone who has lived in Banglore for 18 years, I couldn't agree more. The metro system in Banglore has over the years managed to control this issue to a large extent. I have come to see the hyperloop system as a for the lack of a better word modern iteration of the concept of metroes. 
+India is rapidly developing country and transport infrastructure needs to grow to meet the ever growing demand. An economically implemented Hyperloop is in a good place to provide a novel solution to this growing demand. The lost productivity due to traffic jams is in the order of billions per annum, lessening commute time would also increase general productivity. An economically designed hyperloop model could after the initial capital and maintenance still effectively create a significant positive outcome for the economy. Not to mention the effect it would have in lowering vehicular emissions. If a complete hyperloop network were to be setup across the country and if it can reduce pollution on the order of EVs now on a larger scale it would be tremendous.
 
-    In conclusion I think the hyperloop would be a novel solution to modern transportation issues and it is feasible since it would pay off within a reasonable time span. The success of the first line would create demand for more hyperloop lines and this process will create the new market and a subsequent "race" for hyperloop innovation. 
+    In conclusion, I think the hyperloop would be a novel solution to modern transportation issues and it is feasible since I believe it likely bring more focus on innovation in transportation. The success of the first line would create demand for more hyperloop lines and this process compounds and will create a new market and a subsequent "race" for hyperloop innovation very possibly on a global scale. 
 
-2.
+2. 
 
 3. I want to work on the PCB and embedded software aspects of the Electrical Subsystem. I am passionate about low-level programming and working close to hardware.  
 
-4.
+4. 
 
 5. I am a DC in Math Club wokring on a 3D rendering mini-project and a DC is Programming Club under the CPP dev vertical. I can dedicate 18-20 hours a week comfortably and maybe 2-3 more hours depending on the week. 
 
@@ -96,11 +96,18 @@ $$
 R=\frac V{V_\text{fuse}},\, C=\frac{V_\text{fuse}}{3V}T
 $$
 
-3.
+3. That capacitor functions as a "DC-Link capacitor". It is commonly used in DC-AC converters where it helps to keep the input voltage stable. This includes protecting it from spikes and ripple currents. 
+The capacitance for the DC-Link capacitor depends on the input ripple currents and duty cycle. In general the minimum required capacitance is 
 
+$$
+C_\text{min} = \frac{1000}{V_\text{P(max)}}\times \frac{d(1-d)I_\text{out}}{f_\text{SW}}
+$$
+
+Where $I_\text{out}$ is the output current, $d$ is duty cycle, $f_\text{SW}$ is switching frequency and $V_\text{P(max)}$ is maximum peak to peak voltage of the ripple current.
+ 
 **Sources:**
 - [TI Pre-Charge application brief](https://www.ti.com/lit/ab/slvafb0/slvafb0.pdf)
-
+- [DC Link Capacitor](https://www.capacitorconnect.com/what-is-a-dc-link-capacitor/)
 ## Question 3
 
 The NCR18650BD data sheet puts the discharge end voltage at 2.5 V and capacity of 3 Ah.
@@ -136,7 +143,13 @@ Solder mask is a thin layer of polymer applied to copper traces and vias for pro
 Differential pair refers to a pair of signal traces commonly used it high-speed circuits to cancel out noise and enhance signal strength. Both traces carry the same signal but with opposite phase and the receiver samples the signal by taking the difference between the two signals. This has the advantage of removing any common noise and amplifying the signal.
 
 
-**B)**
+**B)** The left most circuit is a 100nF capacitor tied across 5V and GND this functions as a "bypass capacitor" its main function is to supress noise introduced through the power supply lines.
+
+The next circuit is the one with the op-amp and USBVCC. The LP2985-**33**DBVR chip is 3.3V voltage regulator. If USBVCC is powered (USB is connected) it provides the 5V and the 3.3 V from the regulator. If VIN (DC power supply) is powered it will cause the op-amp to send a high signal which will open the P-Channel MOSFET (usually closed) and disconnect USBVCC.  
+
+Then there is the circuit with the power supply block. This block is the one that supplies VIN so it is the DC power supply. It is connected to a diode to make sure current doesn't flow from the board to the supply. It is then connected to the NCP1117ST50T3G chip which is a voltage regulator that gives out 5V. 
+
+Lastly the LED circuit glows green when 5V is high.
 
 
 **C)** A thermistor is a resistor made of material with resitivity that is strongly dependant on temperature. They change resistance in response to a change in temperature which alters the potential difference across it which we can measure to calculate temperature. If we know the R/T curve for the thermistor we can use it to find temperature.
@@ -153,11 +166,11 @@ The voltage at the divider $V_\text{in}$ is given by
 $$
 V_\text{in}=\frac{5R_\text{therm}}{R_\text{therm}+R_\text{sense}}
 $$
-Assuming we are only dealing with 30-60 C temperatures.
+Assuming we are only dealing with 30-60 C temperatures ( 1.2-4 $k\Omega$ )
 
 $$
-V_\text{in,max}\ge\frac{5R_\text{therm}}{R_\text{therm}+R_\text{sense}} \\ 
-5R_\text{therm}\left(\frac1{V_\text{in,max} - \frac15 \right)\le R_\text{sense} 
+V_\text{in,max}\ge\frac{5R_\text{therm}}{R_\text{therm}+R_\text{sense}} \\ \ \\
+R_\text{therm}\left(\frac5{V_\text{in,max}} -1 \right)\le R_\text{sense} 
 $$
 
 $$
@@ -183,7 +196,10 @@ This is a fit with $R^2=99.89$
 
 **Sources**
    - [PCB GoGO](https://www.pcbgogo.com/knowledge-center/Printed_Circuit_Board_Prototype.html)
-
+   - [Thermister Wikipedia](https://en.wikipedia.org/wiki/Thermistor)
+   - [Bypass capacitor Electronics SE](https://electronics.stackexchange.com/questions/154277/what-are-the-capacitors-between-5v-and-gnd-for)
+   - [LSP2985](https://www.ti.com/lit/ds/symlink/lp2985.pdf)
+   - [NCP117](https://www.onsemi.com/pdf/datasheet/ncp1117-d.pdf)
 
 ## Question 5 
 
